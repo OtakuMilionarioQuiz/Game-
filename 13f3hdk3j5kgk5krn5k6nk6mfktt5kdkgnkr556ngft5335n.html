@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Quiz Otaku - Milionário</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+   
+  }
+
+  body {
+    height: 100vh;
+    background: url('https://wallpaperaccess.com/full/1121633.jpg') no-repeat center center;
+    background-size: cover;
+    animation: zoomBg 20s infinite alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-image 1s ease-in-out;
+  }
+  @keyframes zoomBg {
+    0% { background-size: 100%; }
+    100% { background-size: 110%; }
+  }
+  .div-container {
+    width: 90%;
+    max-width: 900px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    min-height: 350px;
+  }
+  .div1, .div2, .div3 {
+    width: 100%;
+  }
+  .div1 {
+    display: flex;
+    gap: 10px;
+  }
+  .div-a {
+    flex: 1;
+    background: rgba(255, 165, 0, 0.7);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+  .div-b {
+    flex: 3;
+    background: linear-gradient(to top right, #001f3f, #003366, #004080);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    font-size: 1.2em;
+  }
+  .div2 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .answer {
+    background: #001f3f;
+    border: 3px solid white;
+    border-radius: 50px;
+    padding: 15px;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    position: relative;
+    user-select: none;
+  }
+  .answer:hover:not(.disabled) {
+    transform: scale(1.03);
+  }
+  .answer span {
+    color: orange;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  .div3 {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .help-icon {
+    width: 50px;
+    height: 50px;
+    border: 2px solid white;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.8em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: rgba(0, 0, 50, 0.7);
+    text-align: center;
+    transition: background 0.3s, opacity 0.3s;
+    user-select: none;
+  }
+  .help-icon:hover:not(.disabled) {
+    background: rgba(0, 0, 100, 0.8);
+  }
+  .help-icon.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+    cursor: default;
+  }
+  .timer {
+    position: absolute;
+    top: 17px;
+    right: 5px;
+    background: #001f3f;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    color: green;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    text-align: center;
+    animation: blink 1s infinite alternate;
+    user-select: none;
+    z-index: 100;
+  }
+
+.vida {
+    position: absolute;
+    top: 90px;
+    right: 5px;
+    background: #001f3f;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    text-align: center;
+    user-select: none;
+    z-index: 100;
+    opacity: 0.5;
+    animation: blink 1s infinite alternate;
+  }
+
+
+  @keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0.7; }
+  }
+  .correct { background: green !important; color: white; }
+  .wrong { background: red !important; color: white; }
+  .disabled {
+    pointer-events: none !important;
+    opacity: 0.5 !important;
+  }
+  .percent-hint {
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    font-size: 0.8em;
+    color: #ccc;
+    user-select: none;
+  }
+  /* Tela inicial e final */
+  #start-screen, #end-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 15px;
+    font-size: 1.4em;
+    z-index: 10;
+    text-align: center;
+    padding: 20px;
+  }
+  #start-screen button, #end-screen button {
+    margin-top: 20px;
+    padding: 12px 30px;
+    font-size: 1.2em;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    background-color: orange;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  #start-screen button:hover, #end-screen button:hover {
+    background-color: darkorange;
+  }
+</style>
+</head>
+<body>
+
+<div class="timer" id="timer" style="display:none;">10</div>
+<div class="vida" id="vida-restante" style="display:none;"></div>
+
+<div class="div-container" id="game-container" style="display:none;">
+  <div class="div1">
+    <div class="div-a" id="score">Kz 0</div>
+    <div class="div-b" id="question">Carregando pergunta...</div>
+  </div>
+  <div class="div2" id="answers"></div>
+  <div class="div3">
+    <div class="help-icon" id="help1" title="Mostrar porcentagem">%</div>
+    <div class="help-icon" id="help2" title="Eliminar 2 respostas erradas">2/4</div>
+    <div class="help-icon" id="help3" title="Mostrar resposta correta">✔</div>
+    <div class="help-icon" id="help4" title="Pular pergunta">Pular</div>
+  </div>
+</div>
+
+<!-- Tela Inicial -->
+<div id="start-screen">
+  <h1>Otaku Milionário Quiz - OMQ</h1>
+  <p>Responda perguntas sobre seus animes e desenhos animados favoritos e acumule dinheiro! Use as ajudas com sabedoria.</p>
+  <button id="start-button">Começar</button>
+</div>
+
+<!-- Tela Final -->
+<div id="end-screen" style="display:none;">
+  <h1>Fim de Jogo!</h1>
+  <p id="final-score"></p>
+  <button id="restart-button">Jogar Novamente</button>
+</div>
+
+
+
+
+<!-- Áudios -->
+<audio id="bgMusic" loop>
+  <source src="Som_de_fundo.mp3" type="audio/mp3" />
+  Seu navegador não suporta áudio.
+</audio>
+
+<audio id="correctSound">
+  <source src="Vitoria.mp3" type="audio/mp3" />
+  Seu navegador não suporta áudio.
+</audio>
+
+<audio id="wrongSound">
+  <source src="Perdedor.mp3" type="audio/mp3" />
+  Seu navegador não suporta áudio.
+</audio>
+
+
+
+
+
+
+<script>
+const perguntas = [
+  {
+    anime: 'Naruto',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Qual é o nome do irmão de Sasuke Uchiha?',
+    respostas: ['Madara', 'Kakashi', 'Itachi', 'Obito'],
+    correta: 2
+  },
+  {
+    anime: 'One Piece',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Qual é o nome do capitão dos Chapéus de Palha?',
+    respostas: ['Zoro', 'Nami', 'Sanji', 'Luffy'],
+    correta: 3
+  },
+  {
+    anime: 'Dragon Ball Z',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Quem foi o primeiro Super Saiyajin mostrado na série?',
+    respostas: ['Vegeta', 'Trunks', 'Goku', 'Gohan'],
+    correta: 2
+  },
+  {
+    anime: 'Death Note',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Qual o nome verdadeiro do personagem "L"?',
+    respostas: ['L Lawliet', 'Light Yagami', 'Ryuk', 'Matsuda'],
+    correta: 0
+  },
+  {
+    anime: 'Attack on Titan',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Quem é o Titã de Ataque?',
+    respostas: ['Levi', 'Eren', 'Mikasa', 'Armin'],
+    correta: 1
+  },
+  {
+    anime: 'My Hero Academia',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Qual é o nome do herói número 1?',
+    respostas: ['Endeavor', 'Bakugo', 'All Might', 'Todoroki'],
+    correta: 2
+  },
+  {
+    anime: 'Bleach',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Quem é o protagonista de Bleach?',
+    respostas: ['Ichigo', 'Renji', 'Aizen', 'Urahara'],
+    correta: 0
+  },
+  {
+    anime: 'Demon Slayer',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Qual é o nome da irmã de Tanjiro?',
+    respostas: ['Kanae', 'Nezuko', 'Shinobu', 'Kanao'],
+    correta: 1
+  },
+  {
+    anime: 'Tokyo Ghoul',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Quem é o protagonista de Tokyo Ghoul?',
+    respostas: ['Arima', 'Kaneki', 'Amon', 'Hide'],
+    correta: 1
+  },
+  {
+    anime: 'Sword Art Online',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Qual é o nome do protagonista de SAO?',
+    respostas: ['Kirito', 'Klein', 'Asuna', 'Heathcliff'],
+    correta: 0
+  },
+  {
+    anime: 'Fullmetal Alchemist',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Quem é o irmão de Edward Elric?',
+    respostas: ['Roy', 'Alphonse', 'Scar', 'Bradley'],
+    correta: 1
+  },
+  {
+    anime: 'Jujutsu Kaisen',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Quem é o portador de Sukuna?',
+    respostas: ['Gojo', 'Fushiguro', 'Itadori', 'Nanami'],
+    correta: 2
+  },
+  {
+    anime: 'Black Clover',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Qual é o nome do protagonista de Black Clover?',
+    respostas: ['Yuno', 'Asta', 'Noelle', 'Magna'],
+    correta: 1
+  },
+  {
+    anime: 'Fairy Tail',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Quem é o protagonista de Fairy Tail?',
+    respostas: ['Natsu', 'Gray', 'Happy', 'Gajeel'],
+    correta: 0
+  },
+  {
+    anime: 'Mob Psycho 100',
+    fundo: 'https://wallpaperaccess.com/full/1121633.jpg',
+    pergunta: 'Qual é o verdadeiro nome de Mob?',
+    respostas: ['Shigeo', 'Reigen', 'Kageyama', 'Teruki'],
+    correta: 0
+  }
+];
+
+
+let score = 0;
+let current = 0;
+let correctStreak = 0;
+let timerInterval;
+let timer = 10;
+let helpsUsed = [false, false, false, false];
+let helpDisabled = false;
+let gameStarted = false;
+let jogoFinalizado = false;
+let errors = 0;
+const MAX_ERRORS = 5;
+
+const questionEl = document.getElementById('question');
+const answersEl = document.getElementById('answers');
+const scoreEl = document.getElementById('score');
+const timerEl = document.getElementById('timer');
+const vidaE1 = document.getElementById('vida-restante');
+const helpIcons = [
+  document.getElementById('help1'),
+  document.getElementById('help2'),
+  document.getElementById('help3'),
+  document.getElementById('help4')
+];
+
+const startScreen = document.getElementById('start-screen');
+const endScreen = document.getElementById('end-screen');
+const finalScoreEl = document.getElementById('final-score');
+const startButton = document.getElementById('start-button');
+const restartButton = document.getElementById('restart-button');
+const gameContainer = document.getElementById('game-container');
+
+const bgMusic = document.getElementById('bgMusic');
+const correctSound = document.getElementById('correctSound');
+const wrongSound = document.getElementById('wrongSound');
+
+// Função para tocar sons, com tratamento
+function playSound(sound) {
+  if (!sound) return;
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+}
+
+function updateScore() {
+  scoreEl.innerText = `Kz ${score}`;
+  if(score < 0) score = 0; // não deixa score negativo
+}
+
+// Atualiza plano de fundo conforme anime
+function updateBackground(index) {
+  const url = perguntas[index].fundo;
+  document.body.style.backgroundImage = `url('${url}')`;
+}
+
+// Exibe pergunta e respostas
+function loadQuestion() {
+
+       if (jogoFinalizado) return;
+
+  clearInterval(timerInterval);
+  vidaE1.innerText = `${MAX_ERRORS-errors}❤️`;
+  timer = 10;
+  timerEl.innerText = timer;
+  timerEl.style.color = 'green';
+  timerEl.style.display = 'flex';
+  helpDisabled = false;
+
+  enableHelpIcons();
+  enableAnswers();
+  removePercentHints();
+
+  updateBackground(current);
+
+  questionEl.innerText = perguntas[current].pergunta;
+
+  // Limpa respostas antigas
+  answersEl.innerHTML = '';
+
+  perguntas[current].respostas.forEach((resposta, idx) => {
+    const div = document.createElement('div');
+    div.className = 'answer';
+    div.dataset.index = idx;
+    div.innerHTML = `<span>${String.fromCharCode(65 + idx)}</span>${resposta}`;
+    div.addEventListener('click', () => handleAnswer(idx));
+    answersEl.appendChild(div);
+  });
+
+  startTimer();
+}
+
+// Ativa timer e decrementa a cada segundo
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timer--;
+    timerEl.innerText = timer;
+    if (timer <= 5) {
+      timerEl.style.color = 'red';
+    } else {
+      timerEl.style.color = 'green';
+    }
+    if (timer === 0) {
+      clearInterval(timerInterval);
+      timerEl.style.color = 'red';
+      timerEl.innerText = 'Tempo esgotado!';
+      handleTimeout();
+    }
+  }, 1000);
+}
+
+// Quando o tempo acaba sem resposta
+function handleTimeout() {
+  // Retira pontos e atualiza placar
+  score -= 500;
+  if(score < 0) score = 0;
+  updateScore();
+    
+
+  errors++; // ⬅️ Conta erro
+  checkErrors(); // ⬅️ Verifica se passou do limite
+
+  // Marca a resposta correta
+  markCorrectAnswer();
+
+  // Bloqueia respostas e ajuda
+  disableAnswers();
+  disableHelpIcons();
+
+  // Após 2 segundos, passa para próxima pergunta ou fim do jogo
+  setTimeout(() => {
+    nextQuestionOrEnd();
+  }, 2000);
+}
+
+// Marca a resposta correta na tela
+function markCorrectAnswer() {
+  const correctIndex = perguntas[current].correta;
+  const allAnswers = document.querySelectorAll('.answer');
+  allAnswers.forEach((ans, idx) => {
+    ans.classList.add('disabled');
+    if(idx === correctIndex) {
+      ans.classList.add('correct');
+    }
+  });
+}
+
+// Desativa todas as respostas para impedir interação
+function disableAnswers() {
+  const allAnswers = document.querySelectorAll('.answer');
+  allAnswers.forEach(ans => {
+    ans.classList.add('disabled');
+  });
+}
+
+// Ativa respostas para seleção
+function enableAnswers() {
+  const allAnswers = document.querySelectorAll('.answer');
+  allAnswers.forEach(ans => {
+    ans.classList.remove('disabled', 'correct', 'wrong');
+  });
+}
+
+// Desativa ícones de ajuda
+function disableHelpIcons() {
+  helpIcons.forEach(icon => icon.classList.add('disabled'));
+}
+
+// Ativa ícones de ajuda que ainda não foram usados
+function enableHelpIcons() {
+  helpIcons.forEach((icon, idx) => {
+    if (helpsUsed[idx]) {
+      icon.classList.add('disabled');
+    } else {
+      icon.classList.remove('disabled');
+    }
+  });
+}
+
+// Remove dicas de porcentagem da tela
+function removePercentHints() {
+  const percentHints = document.querySelectorAll('.percent-hint');
+  percentHints.forEach(el => el.remove());
+}
+
+// Mostra dicas de porcentagem ao lado das respostas
+function showPercentHints() {
+  removePercentHints();
+  const allAnswers = document.querySelectorAll('.answer');
+  allAnswers.forEach((ans) => {
+    const span = document.createElement('div');
+    span.className = 'percent-hint';
+    span.innerText = `${(Math.random() * 100).toFixed(0)}%`;
+    ans.appendChild(span);
+  });
+}
+
+// Elimina exatamente duas respostas erradas
+function eliminateTwoWrong() {
+  const correctIndex = perguntas[current].correta;
+  const allAnswers = Array.from(document.querySelectorAll('.answer'));
+  // Pegue respostas erradas não eliminadas ainda (sem classe 'disabled' e sem classe 'correct')
+  let wrongAnswers = allAnswers.filter((ans, idx) => idx !== correctIndex && !ans.classList.contains('disabled'));
+  if (wrongAnswers.length <= 2) {
+    // se tem 2 ou menos erradas, elimina todas
+    wrongAnswers.forEach(ans => {
+      ans.classList.add('disabled');
+      ans.style.opacity = '0.3';
+    });
+  } else {
+    // remove aleatoriamente duas delas
+    for(let i=0; i<2; i++) {
+      let idx = Math.floor(Math.random() * wrongAnswers.length);
+      let ans = wrongAnswers.splice(idx,1)[0];
+      ans.classList.add('disabled');
+      ans.style.opacity = '0.3';
+    }
+  }
+}
+
+// Marca a resposta correta e trata como resposta certa (ponto)
+function showCorrectAnswerHelp() {
+  disableHelpIcons();
+  disableAnswers();
+  helpsUsed[2] = true;
+
+  const correctIndex = perguntas[current].correta;
+  const allAnswers = document.querySelectorAll('.answer');
+  allAnswers.forEach((ans, idx) => {
+    if(idx === correctIndex) {
+      ans.classList.add('correct');
+    } else {
+      ans.classList.add('disabled');
+    }
+  });
+
+  // Dá pontos como se o jogador tivesse acertado
+  score += 500;
+  correctStreak++;
+  updateScore();
+
+  // Avança para próxima após 2 segundos
+  setTimeout(() => {
+    nextQuestionOrEnd();
+  }, 2000);
+}
+
+// Passa para a próxima pergunta ou finaliza o jogo
+function nextQuestionOrEnd() {
+  current++;
+  if (current >= perguntas.length) {
+    // Fim do jogo
+    endGame();
+  } else {
+    loadQuestion();
+  }
+}
+
+
+
+
+
+// Finaliza o jogo, mostra tela final
+function endGame() {
+
+  clearInterval(timerInterval);
+
+  if (jogoFinalizado) return; // Evita múltiplas chamadas
+  jogoFinalizado = true;
+  vidaE1.style.display = 'none';
+  timerEl.style.display = 'none';
+  gameContainer.style.display = 'none';
+  endScreen.style.display = 'flex';
+  
+  errors = 0;
+
+  finalScoreEl.innerHTML = `  <p id="final-score"> Sua pontuação final foi: ${score} Kz <br></p>`;
+ 
+  if (score >= 1000) {
+       // Gera e mostra o código
+      const codigoHex = gerarCodigoHexadecimalComMarcadores();
+      finalScoreEl.innerText = finalScoreEl.innerText + `Reclame seu prêmio:${codigoHex}`;
+  }
+
+  // Para música de fundo
+  if(!bgMusic.paused) bgMusic.pause();
+
+}
+
+
+
+
+
+
+
+
+
+// Reseta o jogo para jogar novamente
+function resetGame() {
+  score = 0;
+  current = 0;
+  correctStreak = 0;
+  helpsUsed = [false, false, false, false];
+  helpDisabled = false;
+  gameStarted = true;
+
+  updateScore();
+  loadQuestion();
+  gameContainer.style.display = 'flex';
+  endScreen.style.display = 'none';
+  startScreen.style.display = 'none';
+
+  bgMusic.play().catch(() => {});
+}
+
+// Manipula clique em resposta
+function handleAnswer(selectedIndex) {
+  if(helpDisabled) return; // bloqueado
+  helpDisabled = true;
+  clearInterval(timerInterval);
+  disableHelpIcons();
+  disableAnswers();
+
+  const correctIndex = perguntas[current].correta;
+  if(selectedIndex === correctIndex) {
+    // Acertou
+    correctSound.currentTime = 0;
+    correctSound.play().catch(() => {});
+    score += 1500; // PONTUAÇÃO NENGUE 
+    correctStreak++;
+    updateScore();
+
+    // Mostra feedback verde
+    const selectedDiv = answersEl.querySelector(`.answer[data-index='${selectedIndex}']`);
+    selectedDiv.classList.add('correct');
+    timerEl.style.display = 'none';
+
+    setTimeout(() => {
+      nextQuestionOrEnd();
+    }, 1500);
+  } else {
+    // Errou
+    wrongSound.currentTime = 0;
+    wrongSound.play().catch(() => {});
+    errors++; // ⬅️ Conta erro
+    checkErrors(); // ⬅️ Verifica se passou do lim
+    score -= 500;
+    if(score < 0) score = 0;
+    updateScore();
+    correctStreak = 0;
+
+    // Marca correto em verde e erro em vermelho
+    const selectedDiv = answersEl.querySelector(`.answer[data-index='${selectedIndex}']`);
+    const correctDiv = answersEl.querySelector(`.answer[data-index='${correctIndex}']`);
+    selectedDiv.classList.add('wrong');
+    correctDiv.classList.add('correct');
+    timerEl.style.display = 'none';
+
+    setTimeout(() => {
+      nextQuestionOrEnd();
+    }, 2500);
+  }
+}
+
+// Função chamada quando ajuda é clicada
+function handleHelp(index) {
+  if(helpsUsed[index] || helpDisabled) return;
+  helpsUsed[index] = true;
+  helpIcons[index].classList.add('disabled');
+
+  switch(index) {
+    case 0: // Mostrar porcentagem
+      showPercentHints();
+      break;
+    case 1: // Eliminar 2 respostas erradas
+      eliminateTwoWrong();
+      break;
+    case 2: // Mostrar resposta correta e contar ponto
+      showCorrectAnswerHelp();
+      break;
+    case 3: // Pular pergunta sem penalidade
+      clearInterval(timerInterval);
+      disableAnswers();
+      disableHelpIcons();
+      timerEl.style.display = 'none';
+      correctStreak = 0;
+      setTimeout(() => {
+        nextQuestionOrEnd();
+      }, 1000);
+      break;
+  }
+}
+
+helpIcons.forEach((icon, idx) => {
+  icon.addEventListener('click', () => handleHelp(idx));
+});
+
+startButton.addEventListener('click', () => {
+  shuffle(perguntas);
+  jogoFinalizado=false;
+  startScreen.style.display = 'none';
+  gameContainer.style.display = 'flex';
+  vidaE1.style.display = 'flex';
+  resetGame();
+});
+
+restartButton.addEventListener('click', () => {
+  shuffle(perguntas);
+  jogoFinalizado=false;
+  endScreen.style.display = 'none';
+  gameContainer.style.display = 'flex';
+  vidaE1.style.display = 'flex';
+  resetGame();
+});
+
+
+
+
+
+function gerarCodigoHexadecimalComMarcadores() {
+  const marcadores = ["3Z", "2Y", "3X", "6W", "8V"];
+  const marcador = marcadores[Math.floor(Math.random() * marcadores.length)];
+
+  // Gera partes aleatórias
+  function gerarHexAleatorio(tamanho) {
+    const hex = "0123456789ABCDEF";
+    let resultado = "";
+    for (let i = 0; i < tamanho; i++) {
+      resultado += hex[Math.floor(Math.random() * hex.length)];
+    }
+    return resultado;
+  }
+
+  // Construir o código:
+  // total 12 caracteres: AABBCDEFYYGH
+  // Onde BB = marcador[0], CC = marcador[1] nas posições 3–4 e 10–11
+  const parte1 = gerarHexAleatorio(2);          // posições 1–2
+  const parte2 = marcador[0];                   // posição 3
+  const parte3 = marcador[1];                   // posição 4
+  const parte4 = gerarHexAleatorio(5);          // posições 5–9
+  const parte5 = marcador[0];                   // posição 10
+  const parte6 = marcador[1];                   // posição 11
+  const parte7 = gerarHexAleatorio(1);          // posição 12
+
+  const codigoFinal = parte1 + parte2 + parte3 + parte4 + parte5 + parte6 + parte7;
+  return codigoFinal;
+}
+
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+
+
+
+function checkErrors() {
+  if (errors >= MAX_ERRORS) {
+    endGame();
+  }
+}
+
+</script>
+</body>
+</html>
