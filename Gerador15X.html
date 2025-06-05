@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador de Códigos com Marcadores</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      padding: 2rem;
+      text-align: center;
+      color: #333;
+    }
+    button {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #lista-codigos {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-family: monospace;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      user-select: all;
+    }
+    #lista-codigos div {
+      padding: 0.3rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    #lista-codigos div:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerador de Códigos com Marcadores</h1>
+  <button id="btn-gerar">Gerar Novo Código</button>
+  <div id="lista-codigos" aria-live="polite" aria-label="Lista de códigos gerados">
+    <!-- Códigos aparecerão aqui -->
+  </div>
+
+  <script>
+    function gerarCodigo15ComMarcadores() {
+      const marcadores = ["3Z", "2Y", "3X", "6W", "8V"];
+      const marcador = marcadores[Math.floor(Math.random() * marcadores.length)];
+
+      function gerarHexAleatorio(tamanho) {
+        const hex = "0123456789ABCDEF";
+        let resultado = "";
+        for (let i = 0; i < tamanho; i++) {
+          resultado += hex[Math.floor(Math.random() * hex.length)];
+        }
+        return resultado;
+      }
+
+      const parte1 = gerarHexAleatorio(2);  // 1-2
+      const parte2 = marcador;               // 3-4
+      const parte3 = gerarHexAleatorio(3);  // 5-7
+      const parte4 = marcador;               // 8-9
+      const parte5 = gerarHexAleatorio(3);  // 10-12
+      const parte6 = marcador;               // 13-14
+      const parte7 = gerarHexAleatorio(1);  // 15
+
+      return parte1 + parte2 + parte3 + parte4 + parte5 + parte6 + parte7;
+    }
+
+    const btnGerar = document.getElementById('btn-gerar');
+    const listaCodigos = document.getElementById('lista-codigos');
+
+    btnGerar.addEventListener('click', () => {
+      const codigo = gerarCodigo15ComMarcadores();
+      const novoDiv = document.createElement('div');
+      novoDiv.textContent = codigo;
+      listaCodigos.prepend(novoDiv);
+    });
+
+
+
+
+
+    
+
+/**
+ * Gera um código de 15 caracteres contendo marcadores especiais para autenticação.
+ * Os marcadores são pares de caracteres escolhidos entre ["3Z", "2Y", "3X", "6W", "8V"].
+ * O código terá 3 pares de marcadores posicionados nas seguintes faixas:
+ *   - posições 3-4
+ *   - posições 8-9
+ *   - posições 13-14
+ * O restante dos caracteres são hexadecimais aleatórios (0-9, A-F).
+ * Total de caracteres: 15
+ */
+ /*
+ function gerarCodigo15ComMarcadores() {
+  const marcadores = ["3Z", "2Y", "3X", "6W", "8V"];
+  const marcador = marcadores[Math.floor(Math.random() * marcadores.length)];
+
+  // Gera uma string hexadecimal aleatória de um dado tamanho
+  function gerarHexAleatorio(tamanho) {
+    const hex = "0123456789ABCDEF";
+    let resultado = "";
+    for (let i = 0; i < tamanho; i++) {
+      resultado += hex[Math.floor(Math.random() * hex.length)];
+    }
+    return resultado;
+  }
+
+  // Construindo o código:
+  // posições 1-2: hex (2 chars)
+  // posições 3-4: marcador (2 chars)
+  // posições 5-7: hex (3 chars)
+  // posições 8-9: marcador (2 chars)
+  // posições 10-12: hex (3 chars)
+  // posições 13-14: marcador (2 chars)
+  // posição 15: hex (1 char)
+  
+  const parte1 = gerarHexAleatorio(2);  // 1-2
+  const parte2 = marcador;               // 3-4
+  const parte3 = gerarHexAleatorio(3);  // 5-7
+  const parte4 = marcador;               // 8-9
+  const parte5 = gerarHexAleatorio(3);  // 10-12
+  const parte6 = marcador;               // 13-14
+  const parte7 = gerarHexAleatorio(1);  // 15
+
+  return parte1 + parte2 + parte3 + parte4 + parte5 + parte6 + parte7;
+}
+*/
+  </script>
+</body>
+</html>
