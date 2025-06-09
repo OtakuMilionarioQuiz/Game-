@@ -712,16 +712,28 @@ body {
 .div-container {
   margin-bottom: 50px;
 }
+body {
+  display: flex;
+  justify-content: center; /* Alinha horizontalmente */
+  align-items: center;     /* Alinha verticalmente */
+  min-height: 100vh;       /* Garante altura total da janela */
+  margin: 0;               /* Remove margens padrão do body */
+}
 
 
     
-@media only screen and (orientation: landscape) and (max-width: 768px) {
+@media only screen and (orientation: landscape) {
   body {
-    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
     margin-bottom: 60px;
+    min-height: 100vh;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
-
 
   </style>
 </head>
