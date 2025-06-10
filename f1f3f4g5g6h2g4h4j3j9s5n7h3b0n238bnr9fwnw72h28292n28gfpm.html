@@ -851,6 +851,7 @@ body {
   <p class="ponto-inferior">Você deve ter 30.000Kz em pontos para obter a chave secreta</p>
   <button class="tente-novamente" id="restart-button">Jogar novamente</button>
   <button class="chave-button">Reclamar prêmio</button>
+  <p style="margin-top:5px; font-size:12px;" class="final-score" id="whatsapp-chave"> Ou envie a chave secreta para o Whatsapp: <span="font-color:yellow">944012003</span> </p>
 </div>
 
 
@@ -2521,6 +2522,7 @@ function endGame() {
       document.querySelector('.chave-button').style.display = 'inline-block';
        //oculta a mensagem ao perdedor
       document.querySelector('.ponto-inferior').style.display = 'none';
+      document.getElementById('whatsapp-chave').style.display = 'block';
       bgMusic.pause();
   }
 
@@ -2532,6 +2534,7 @@ function endGame() {
   document.querySelector('.chave-button').style.display = 'none';
   // mostra a mensagem ao perdedor
   document.querySelector('.ponto-inferior').style.display = 'inline-block';
+  document.getElementById('whatsapp-chave').style.display = 'none';
   bgMusic.pause();
 }
 
