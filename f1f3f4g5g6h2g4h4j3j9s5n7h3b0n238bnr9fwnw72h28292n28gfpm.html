@@ -2355,7 +2355,7 @@ function startTimer() {
 // Quando o tempo acaba sem resposta
 function handleTimeout() {
   // Retira pontos e atualiza placar
-  score -= 500;
+  score -= 80;
   if(score < 0) score = 0;
   updateScore();
     
@@ -2478,7 +2478,7 @@ function showCorrectAnswerHelp() {
   });
 
   // Dá pontos como se o jogador tivesse acertado
-  score += 500;
+  score += 80;
   correctStreak++;
   updateScore();
 
@@ -2491,7 +2491,7 @@ function showCorrectAnswerHelp() {
 // Passa para a próxima pergunta ou finaliza o jogo
 function nextQuestionOrEnd() {
   current++;
-  if (current >= perguntas.length) {
+  if (current >= perguntas.length || score = 2000 ) {
     // Fim do jogo
     endGame();
   } else {
@@ -2519,7 +2519,7 @@ function endGame() {
 
   finalScoreEl.innerHTML = `  <p id="final-score"> Sua pontuação final foi: <span class="no-break"> ${score}Kz </span><br></p>`;
  
-  if (score >= 1000) {
+  if (score >=2000) {
        // Gera e mostra o código
       const codigoHex = gerarCodigoHexadecimalComMarcadores();
       finalScoreEl.innerText = finalScoreEl.innerText + `Reclame seu prêmio enviando a chave :${codigoHex}`;
@@ -2591,7 +2591,7 @@ function handleAnswer(selectedIndex) {
     // Acertou
     correctSound.currentTime = 0;
     correctSound.play().catch(() => {});
-    score += 1500; // PONTUAÇÃO NENGUE 
+    score += 80; // PONTUAÇÃO NENGUE 
     correctStreak++;
     updateScore();
 
@@ -2609,7 +2609,7 @@ function handleAnswer(selectedIndex) {
     wrongSound.play().catch(() => {});
     errors++; // ⬅️ Conta erro
     checkErrors(); // ⬅️ Verifica se passou do lim
-    score -= 500;
+    score -= 80;
     if(score < 0) score = 0;
     updateScore();
     correctStreak = 0;
