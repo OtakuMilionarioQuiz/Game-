@@ -46,9 +46,55 @@
     #lista-codigos div:last-child {
       border-bottom: none;
     }
+
+    /* BLOQUEIO POR SENHA */
+    #tela-bloqueio {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #caixa-senha {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    #caixa-senha input {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      width: 100%;
+      max-width: 250px;
+    }
+    #caixa-senha button {
+      width: 100%;
+      max-width: 250px;
+    }
+    #erro-senha {
+      color: red;
+      margin-top: 0.5rem;
+      display: none;
+    }
   </style>
 </head>
 <body>
+  <div id="tela-bloqueio">
+    <div id="caixa-senha">
+      <h2>Digite a senha para acessar</h2>
+      <input type="password" id="senha" placeholder="Senha" />
+      <br>
+      <button onclick="verificarSenha()">Entrar</button>
+      <div id="erro-senha">Senha incorreta</div>
+    </div>
+  </div>
+
   <h1>Gerador de Códigos com Marcadores</h1>
   <button id="btn-gerar">Gerar Novo Código</button>
   <div id="lista-codigos" aria-live="polite" aria-label="Lista de códigos gerados">
@@ -56,6 +102,19 @@
   </div>
 
   <script>
+    const senhaCorreta = "1234"; // <-- Altere aqui sua senha!
+
+    function verificarSenha() {
+      const senha = document.getElementById("senha").value;
+      const erro = document.getElementById("erro-senha");
+
+      if (senha === senhaCorreta) {
+        document.getElementById("tela-bloqueio").style.display = "none";
+      } else {
+        erro.style.display = "block";
+      }
+    }
+
     function gerarCodigo15ComMarcadores() {
       const marcadores = ["3Z", "2Y", "3X", "6W", "8V"];
       const marcador = marcadores[Math.floor(Math.random() * marcadores.length)];
@@ -69,13 +128,13 @@
         return resultado;
       }
 
-      const parte1 = gerarHexAleatorio(2);  // 1-2
-      const parte2 = marcador;               // 3-4
-      const parte3 = gerarHexAleatorio(3);  // 5-7
-      const parte4 = marcador;               // 8-9
-      const parte5 = gerarHexAleatorio(3);  // 10-12
-      const parte6 = marcador;               // 13-14
-      const parte7 = gerarHexAleatorio(1);  // 15
+      const parte1 = gerarHexAleatorio(2);
+      const parte2 = marcador;
+      const parte3 = gerarHexAleatorio(3);
+      const parte4 = marcador;
+      const parte5 = gerarHexAleatorio(3);
+      const parte6 = marcador;
+      const parte7 = gerarHexAleatorio(1);
 
       return parte1 + parte2 + parte3 + parte4 + parte5 + parte6 + parte7;
     }
@@ -89,58 +148,6 @@
       novoDiv.textContent = codigo;
       listaCodigos.prepend(novoDiv);
     });
-
-
-
-
-
-    
-
-/**
- * Gera um código de 15 caracteres contendo marcadores especiais para autenticação.
- * Os marcadores são pares de caracteres escolhidos entre ["3Z", "2Y", "3X", "6W", "8V"].
- * O código terá 3 pares de marcadores posicionados nas seguintes faixas:
- *   - posições 3-4
- *   - posições 8-9
- *   - posições 13-14
- * O restante dos caracteres são hexadecimais aleatórios (0-9, A-F).
- * Total de caracteres: 15
- */
- /*
- function gerarCodigo15ComMarcadores() {
-  const marcadores = ["3Z", "2Y", "3X", "6W", "8V"];
-  const marcador = marcadores[Math.floor(Math.random() * marcadores.length)];
-
-  // Gera uma string hexadecimal aleatória de um dado tamanho
-  function gerarHexAleatorio(tamanho) {
-    const hex = "0123456789ABCDEF";
-    let resultado = "";
-    for (let i = 0; i < tamanho; i++) {
-      resultado += hex[Math.floor(Math.random() * hex.length)];
-    }
-    return resultado;
-  }
-
-  // Construindo o código:
-  // posições 1-2: hex (2 chars)
-  // posições 3-4: marcador (2 chars)
-  // posições 5-7: hex (3 chars)
-  // posições 8-9: marcador (2 chars)
-  // posições 10-12: hex (3 chars)
-  // posições 13-14: marcador (2 chars)
-  // posição 15: hex (1 char)
-  
-  const parte1 = gerarHexAleatorio(2);  // 1-2
-  const parte2 = marcador;               // 3-4
-  const parte3 = gerarHexAleatorio(3);  // 5-7
-  const parte4 = marcador;               // 8-9
-  const parte5 = gerarHexAleatorio(3);  // 10-12
-  const parte6 = marcador;               // 13-14
-  const parte7 = gerarHexAleatorio(1);  // 15
-
-  return parte1 + parte2 + parte3 + parte4 + parte5 + parte6 + parte7;
-}
-*/
   </script>
 </body>
 </html>
