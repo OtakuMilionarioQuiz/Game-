@@ -2528,7 +2528,7 @@ function endGame() {
   if (score >=2000) {
        // Gera e mostra o código
       const codigoHex = gerarCodigoHexadecimalComMarcadores();
-      finalScoreEl.innerText = finalScoreEl.innerText + `Reclame seu prêmio enviando a chave :${codigoHex}${bardeados}`;
+      finalScoreEl.innerText = finalScoreEl.innerText + `Reclame seu prêmio enviando a chave secreta :${codigoHex}${bardeados}`;
       // Oculta botão "Jogar Novamente"
       document.getElementById('restart-button').style.display = 'none';
      // Mostra botão "Reclamar prêmio"
