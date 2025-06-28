@@ -2809,7 +2809,7 @@ function checkErrors() {
 }
 
 
-const dataInicio = new Date('2025-06-28T18:00:00'); // data e hora alvo
+const dataInicio = new Date(rh_clt); 
 const preStartScreen = document.getElementById('pre-start-screen');
 const countdownEl = document.getElementById('countdown');
 const senhaContainer = document.getElementById('senha-container');
@@ -2853,8 +2853,7 @@ function verificarSenha() {
 const intervalo = setInterval(atualizarContagem, 1000);
 
 
- // Defina aqui a data/hora de finalização da competição
-   const dataFinalizacao = new Date('2025-06-28T19:00:00');
+   const dataFinalizacao = new Date('2025-06-29T02:00:00');
 
 
   function verificarFinalizacao() {
