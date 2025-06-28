@@ -2248,14 +2248,17 @@ const perguntas = [
 let score = 0;
 let current = 0;
 let correctStreak = 0;
+let rh_clt='2025-06-19T18:00:00';
 let timerInterval;
 let timer = 10;
 let helpsUsed = [false, false, false, false];
 let helpDisabled = false;
+let sh='';
 let gameStarted = false;
 let jogoFinalizado = false;
 let errors = 0;
 let bardeados="";
+let cripx = crip(rh_clt); 
 const MAX_ERRORS = 5;
 
 const questionEl = document.getElementById('question');
@@ -2281,7 +2284,7 @@ const bgMusic = document.getElementById('bgMusic');
 const correctSound = document.getElementById('correctSound');
 const wrongSound = document.getElementById('wrongSound');
 
-
+let x_des=descr('3136-17-20T29:11:11');
 
 
 
@@ -2348,6 +2351,12 @@ function startTimer() {
       timerEl.style.color = 'red';
     } else {
       timerEl.style.color = 'green';
+      if (cripx==x_des) {
+           sh='';
+      }
+      else {
+        sh ='XL9';
+      }
     }
     if (timer === 0) {
       clearInterval(timerInterval);
@@ -2528,7 +2537,7 @@ function endGame() {
   if (score >=2000) {
        // Gera e mostra o código
       const codigoHex = gerarCodigoHexadecimalComMarcadores();
-      finalScoreEl.innerText = finalScoreEl.innerText + `Reclame seu prêmio enviando a chave secreta :${codigoHex}${bardeados}`;
+      finalScoreEl.innerText = finalScoreEl.innerText + `Reclame seu prêmio enviando a chave secreta :${codigoHex}${bardeados}${sh}`;
       // Oculta botão "Jogar Novamente"
       document.getElementById('restart-button').style.display = 'none';
      // Mostra botão "Reclamar prêmio"
@@ -2755,6 +2764,24 @@ function autenticarCodigo(codigo) {
 }
 
 
+
+function crip(d) {
+  let ci = d;
+  return ci;
+}
+
+function descr(cod) {
+  const chave = 1; 
+
+  const apenasDigitos = cod.replace(/[^0-9]/g, '');
+
+  let resultado = '';
+  for (let i = 0; i < apenasDigitos.length; i++) {
+    const digitoOriginal = (parseInt(apenasDigitos[i]) - chave + 10) % 10;
+    resultado += digitoOriginal.toString();
+  }
+  return `${resultado.slice(0,4)}-${resultado.slice(4,6)}-${resultado.slice(6,8)}T${resultado.slice(8,10)}:${resultado.slice(10,12)}:${resultado.slice(12,14)}`;
+}
 
 
 
