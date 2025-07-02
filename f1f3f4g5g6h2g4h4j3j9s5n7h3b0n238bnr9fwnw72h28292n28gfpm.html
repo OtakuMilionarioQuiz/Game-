@@ -855,7 +855,7 @@ body {
 <div id="end-screen" style="display:none;">
   <h1>Fim de Jogo!</h1>
   <p id="final-score"></p>
-  <p class="ponto-inferior">Você deve ter 2000Kz em pontos para obter a chave secreta</p>
+  <p class="ponto-inferior">Você deve ter 20.000Kz em pontos para obter a chave secreta</p>
   <button class="tente-novamente" id="restart-button">Jogar novamente</button>
   <button class="chave-button">Reclamar prêmio</button>
   <p style="margin-top:15px; font-size:12px;" class="final-score texto-piscando" id="whatsapp-chave"> Ou reivindique o seu prêmio  enviando a chave secreta para o Whatsapp: 
@@ -2606,7 +2606,7 @@ function handleAnswer(selectedIndex) {
     // Acertou
     correctSound.currentTime = 0;
     correctSound.play().catch(() => {});
-    score += 80; // PONTUAÇÃO NENGUE 
+    score += 133; // PONTUAÇÃO NENGUE 
     correctStreak++;
     updateScore();
 
