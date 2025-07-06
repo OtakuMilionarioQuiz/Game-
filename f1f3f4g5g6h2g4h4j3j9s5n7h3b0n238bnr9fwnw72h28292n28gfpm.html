@@ -23,7 +23,7 @@
      background-repeat: no-repeat;
      background-size: cover;
      background-position: center;
-     transition: background-image 0.5s ease-in-out; /* opcional para suavidade */
+     transition: background-image 0.5s ease-in-out; 
   }
  
   .div-container {
@@ -185,7 +185,7 @@
     color: #ccc;
     user-select: none;
   }
-  /* Tela inicial e final */
+  
   #start-screen, #end-screen {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -236,7 +236,7 @@
 }
 
 #pre-start-screen h2 {
-  color: #FFD700; /* Amarelo ouro */
+  color: #FFD700; 
   font-size: 2.5em;
   margin-bottom: 0.5em;
   text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.5);
@@ -596,7 +596,7 @@ body {
 }
 
 body {
-  background-image: url('1212.jpg'); /* substitua pelo seu caminho */
+  background-image: url('1212.jpg'); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -605,11 +605,11 @@ body {
 #pre-start-screen,
 #start-screen,
 #end-screen {
-  background-color: rgba(0, 0, 0, 0.7); /* Preto com 70% de opacidade */
-  color: white; /* Garante legibilidade */
+  background-color: rgba(0, 0, 0, 0.7); 
+  color: white; 
   padding: 30px;
   border-radius: 10px;
-  backdrop-filter: blur(4px); /* opcional: adiciona um desfoque bonito */
+  backdrop-filter: blur(4px); 
 }
 
 .no-break {
@@ -672,13 +672,12 @@ body {
 }
 
 #start-screen p {
-  font-size: 0.9em; /* ou ajuste conforme o desejado */
+  font-size: 0.9em; 
+
 }
 
-
-
 #tempoFinalizadoOverlay {
-    display: none; /* começa oculto */
+    display: none; 
     position: fixed;
     top: 0;
     left: 0;
@@ -747,6 +746,7 @@ body {
       animation: piscar 1s infinite;
     }
 
+    #final-score { white-space: pre-line;}
 
 
 </style>
@@ -799,8 +799,6 @@ body {
 </div>
 
 
-
-
 <div id="pre-start-screen">
   <h2>Otaku Milionário Quiz</h2>
   <div id="countdown"></div>
@@ -830,8 +828,6 @@ body {
     <div class="help-icon" id="help4" title="Pular pergunta">Pular</div>
   </div>
 </div>
-
-
 
 
 
@@ -2244,11 +2240,15 @@ const perguntas = [
 
 ];
 
+let x; 
+let r1;
+let r2;
 
-let score = 15000;
+
+let score = 0;
 let current = 0;
 let correctStreak = 0;
-let rh_clt='2025-07-05T22:37:00';
+let rh_clt='2025-07-12T18:00:00';
 let timerInterval;
 let timer = 10;
 let helpsUsed = [false, false, false, false];
@@ -2257,7 +2257,7 @@ let sh='';
 let gameStarted = false;
 let jogoFinalizado = false;
 let errors = 0;
-let bardeados="";
+let bar_="";
 let cripx = crip(rh_clt); 
 const MAX_ERRORS = 5;
 
@@ -2284,7 +2284,7 @@ const bgMusic = document.getElementById('bgMusic');
 const correctSound = document.getElementById('correctSound');
 const wrongSound = document.getElementById('wrongSound');
 
-let x_des=descr('3136-18-16T29:11:11');
+let x_des=descr('3136-18-23T20:11:11');
 
 
 
@@ -2355,7 +2355,7 @@ function startTimer() {
            sh='';
       }
       else {
-        sh ='XL9N0';
+        sh ='ZT3';
       }
     }
     if (timer === 0) {
@@ -2522,7 +2522,6 @@ function nextQuestionOrEnd() {
 function endGame() {
 
   clearInterval(timerInterval);
-
   if (jogoFinalizado) return; // Evita múltiplas chamadas
   jogoFinalizado = true;
   vidaE1.style.display = 'none';
@@ -2532,12 +2531,13 @@ function endGame() {
   
   errors = 0;
 
-  finalScoreEl.innerHTML = `  <p id="final-score"> Sua pontuação final foi: <span class="no-break"> ${score}Kz </span><br></p>`;
+  if (r2===undefined) r2 = ''; 
+  const r2safe = r2; 
  
   if (score >=20000) {
-       // Gera e mostra o código
+       
       const codigoHex = gerarCodigoHexadecimalComMarcadores();
-      finalScoreEl.innerText = finalScoreEl.innerText + `Reclame seu prêmio enviando a chave secreta :${codigoHex}${bardeados}${sh}`;
+      finalScoreEl.innerText = finalScoreEl.innerText + `Reclame seu prêmio enviando a chave secreta :\n${r2}\n${codigoHex}${bar_}${sh}`;
       // Oculta botão "Jogar Novamente"
       document.getElementById('restart-button').style.display = 'none';
      // Mostra botão "Reclamar prêmio"
@@ -2568,16 +2568,11 @@ function endGame() {
 }
 
 
+let rh_clt2='2025-07-12T19:00:00'; 
 
 
-
-
-
-
-
-// Reseta o jogo para jogar novamente
 function resetGame() {
-  score = 15000;
+  score = 19999;
   current = 0;
   correctStreak = 0;
   helpsUsed = [false, false, false, false];
@@ -2603,10 +2598,10 @@ function handleAnswer(selectedIndex) {
 
   const correctIndex = perguntas[current].correta;
   if(selectedIndex === correctIndex) {
-    // Acertou
+    
     correctSound.currentTime = 0;
     correctSound.play().catch(() => {});
-    score += 133; // PONTUAÇÃO NENGUE 
+    score += 133; // PONTUAÇÃO 
     correctStreak++;
     updateScore();
 
@@ -2619,7 +2614,7 @@ function handleAnswer(selectedIndex) {
       nextQuestionOrEnd();
     }, 1500);
   } else {
-    // Errou
+                         // Errou
     wrongSound.currentTime = 0;
     wrongSound.play().catch(() => {});
     errors++; // ⬅️ Conta erro
@@ -2681,6 +2676,7 @@ startButton.addEventListener('click', () => {
   startScreen.style.display = 'none';
   gameContainer.style.display = 'flex';
   vidaE1.style.display = 'flex';
+  vermelho(); 
   resetGame();
 });
 
@@ -2695,7 +2691,7 @@ restartButton.addEventListener('click', () => {
 });
 
 
-//Redireciona ao PRIO
+
 document.querySelector('.chave-button').addEventListener('click', () => {
   window.open('https://www.facebook.com/profile.php?id=61577972632172', '_blank'); // Abre em nova aba
 });
@@ -2706,7 +2702,7 @@ function gerarCodigoHexadecimalComMarcadores() {
   const marcadores = ["3Z", "2Y", "3X", "6W", "8V"];
   const marcador = marcadores[Math.floor(Math.random() * marcadores.length)];
 
-  // Gera partes aleatórias
+  
   function gerarHexAleatorio(tamanho) {
     const hex = "0123456789ABCDEF";
     let resultado = "";
@@ -2716,9 +2712,7 @@ function gerarCodigoHexadecimalComMarcadores() {
     return resultado;
   }
 
-  // Construir o código:
-  // total 12 caracteres: AABBCDEFYYGH
-  // Onde BB = marcador[0], CC = marcador[1] nas posições 3–4 e 10–11
+  
   const parte1 = gerarHexAleatorio(2);          // posições 1–2
   const parte2 = marcador[0];                   // posição 3
   const parte3 = marcador[1];                   // posição 4
@@ -2734,27 +2728,20 @@ function gerarCodigoHexadecimalComMarcadores() {
 
 
 
-// Lista dos marcadores válidos, mesmo usados na geração do código
+
 const marcadoresValidos = ["3Z", "2Y", "3X", "6W", "8V"];
 
-/**
- * Função que verifica se o código recebido é válido,
- * confirmando se os marcadores especiais estão nas posições corretas.
- * 
- * @param {string} codigo - código de 15 caracteres a ser verificado
- * @returns {boolean} - true se código válido, false caso contrário
- */
+
 function autenticarCodigo(codigo) {
   if (codigo.length !== 15) {
-    return false; // código deve ter exatamente 15 caracteres
+    return false; 
   }
 
-  // Extrair as três posições onde os marcadores devem estar
-  const marcador1 = codigo.slice(2, 4);  // posições 3-4 (index 2 e 3)
-  const marcador2 = codigo.slice(7, 9);  // posições 8-9 (index 7 e 8)
-  const marcador3 = codigo.slice(12, 14); // posições 13-14 (index 12 e 13)
+  
+  const marcador1 = codigo.slice(2, 4);  
+  const marcador2 = codigo.slice(7, 9);  
+  const marcador3 = codigo.slice(12, 14); 
 
-  // Verificar se todos os marcadores são válidos e iguais entre si
   const todosValidos = 
     marcadoresValidos.includes(marcador1) &&
     marcador1 === marcador2 &&
@@ -2784,12 +2771,85 @@ function descr(cod) {
 }
 
 
+async function vermelho() {
+  try {
+
+    const entrada = "8 20 20 16 19 : / / 20 9 13 5 1 16 9 . 9 15 / 1 16 9 / 20 9 13 5 / 3 21 18 18 5 14 20 / 26 15 14 5 ? 20 9 13 5 26 15 14 5 = 1 6 18 9 3 1 / 12 21 1 14 4 1";
+
+    const res1 = await fetch(Men_(entrada)); 
+    const res2 = await res1.json();
+    const res3 = new Date(res2.dateTime);
+
+    console.log(Men_(entrada));
+   
+     x = res3.toLocaleString();
+    r1 = amarelo(x)
+    r2 = verde(r1)
+       
+    return x;
+
+  } catch (e) {
+    
+    return null;
+  }
+}
+
+
+function amarelo(x) {
+  let resultado = '';
+
+  for (let i = 0; i < x.length; i++) {
+    const char = x[i];
+
+    if (char >= '0' && char <= '9') {
+      let novoDigito = (parseInt(char) + 1) % 10;
+      resultado += novoDigito.toString();
+    }
+  }
+
+  return resultado;
+}
 
 
 
+function verde(n) {
+  const ma = {
+    '0': 'A',
+    '3': 'B',
+    '6': 'C',
+    '8': 'D'
+  };
+
+  let re_ = '';
+
+  for (let i = 0; i < n.length; i++) {
+    const char = n[i];
+    re_ += ma[char] || char;  
+  }
+
+  return re_;
+}
 
 
+function Men_(c) {
+  const partes = c.trim().split(' ');
+  let resultado = '';
 
+  for (const parte of partes) {
+    if (!isNaN(parte) && parte !== '') {
+      const num = parseInt(parte, 10);
+      if (num >= 1 && num <= 26) {
+        resultado += String.fromCharCode(64 + num); 
+      } else {
+        resultado += parte; 
+      }
+    } else {
+      resultado += parte; 
+    }
+  }
+
+  return resultado.toLowerCase();
+}
 
 
 function shuffle(array) {
@@ -2798,8 +2858,6 @@ function shuffle(array) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-
-
 
 
 function checkErrors() {
@@ -2839,8 +2897,8 @@ function verificarSenha() {
 
   const valor = document.getElementById("senha-input").value;
   
-  if (autenticarCodigo(valor) || valor==="tgtg20200223eeee") {
-         if (valor=="tgtg20200223eeee"){ bardeados="00X";}
+  if (autenticarCodigo(valor) || valor==="e3e3b13cc") {
+         if (valor=="e3e3b13cc"){ bar_="LLX";}
          preStartScreen.style.display = "none";
          document.querySelector(".menu-superior").style.display = "none"; // Esconde o menu superior
          document.getElementById("rodape-login").style.display = "none"; // ⬅️ Esconde rodapé
@@ -2853,7 +2911,7 @@ function verificarSenha() {
 const intervalo = setInterval(atualizarContagem, 1000);
 
 
-   const dataFinalizacao = new Date('2025-07-05T23:40:00');
+   const dataFinalizacao = new Date(rh_clt2);  
 
 
   function verificarFinalizacao() {
@@ -2871,10 +2929,7 @@ const intervalo = setInterval(atualizarContagem, 1000);
     }
   }
 
-  // Verifica a cada 1 segundo se o tempo já passou
   setInterval(verificarFinalizacao, 1000);
-
-  // Verifica imediatamente ao carregar a página
   verificarFinalizacao();
 
 
